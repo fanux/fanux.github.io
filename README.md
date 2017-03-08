@@ -1,8 +1,3 @@
----
-tiltle: SealYun
-layout: post
----
-
 ## 宗旨
 以最廉价的方式让您的企业获得容器技术
 
