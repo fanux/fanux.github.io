@@ -63,8 +63,12 @@
 ## 产品介绍
 * 开源社区产品 - （社区搬运工, 仅提供技术服务,培训，文档，与技术咨询等）
 * 自主研发产品
-    * DUI
-    * cattle
+    * click - 一键构建集群工具
+    * cattle - 弹性调度引擎
 
 ## 精品文章
+* [docker入门教程](docker-course.md)
+* [swarm容器集群管理](swarm-cluster-manage.md)
+
+[更多文章](article-list.md)
 ## 价格表
