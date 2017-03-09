@@ -27,8 +27,7 @@ docker启动参数瞬间吓尿，感叹这都是些什么玩意儿。。。 如�
 那个谁，来了台新机器，把环境搞一下。。。 （容我先思考一下人生意义。。。）
 
 有了docker:
-```
-```
+[![asciicast](https://asciinema.org/a/24hs8tx9gjn7htavyfkdlerf7.png)](https://asciinema.org/a/24hs8tx9gjn7htavyfkdlerf7)
 然后就没有然后了。。。
 换个版本？  ok 小case：
 ```
