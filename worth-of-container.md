@@ -29,9 +29,6 @@ docker启动参数瞬间吓尿，感叹这都是些什么玩意儿。。。 如�
 有了docker:
 [![asciicast](https://asciinema.org/a/24hs8tx9gjn7htavyfkdlerf7.png)](https://asciinema.org/a/24hs8tx9gjn7htavyfkdlerf7)
 然后就没有然后了。。。
-换个版本？  ok 小case：
-```
-```
 
    然而这只是个mysql而已，实际的业务比这多，比这复杂，我们曾经部署一套系统，三十多个组件，五十多台服务器,仅用了不到
 一个小时全部部署完毕。没有容器的话真的是个体力活。同样一个项目组，没有使用容器技术，投入三倍人力，加班加点一个星期
