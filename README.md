@@ -79,6 +79,11 @@
 * [swarm容器集群管理](swarm-cluster-manage.md)
 
 [更多文章](article-list.md)
+
 ## 价格表
+* 1730 人/天
+* 216 人/时
+
 ## 联系我们
 * Email: fhtjob@hotmail.com
+* 15805691422 steven fang
