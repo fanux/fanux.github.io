@@ -19,7 +19,7 @@ Parse protocol like smtp pop3 etc,;
 Using C/C++, python, html,js,css create web application, develop IM server.
 
 ### 2016 - now
-[![](http://www.iflytek.com/images/logo.png)](http://www.iflytek.com)
+[![](http://www.iflytek.com/images/logo.png)](http://www.iflytek.com) (科大讯飞研究院）
 
 Using golang to develop cloud compute system.
 
