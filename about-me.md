@@ -26,16 +26,16 @@ Using golang to develop cloud compute system.
 ## Projects
 
 * golang:
-    [lhttp](https://github.com/fanux/lhttp) websocket IM framework.
-    [webgo](https://github.com/fanux/webGo) Go demo with canvas.
-    [cattle](https://github.com/fanux/cattle) Docker swarm re-develop, support scale containers.
+    * [lhttp](https://github.com/fanux/lhttp) websocket IM framework.
+    * [webgo](https://github.com/fanux/webGo) Go demo with canvas.
+    * [cattle](https://github.com/fanux/cattle) Docker swarm re-develop, support scale containers.
 
 * python:
-    [cloudGate](https://github.com/fanux/cloudGate) openstack adapter to ali cloud
-    [forward](https://github.com/fanux/forward) tornado framework wapper, a website with IM server
+    * [cloudGate](https://github.com/fanux/cloudGate) openstack adapter to ali cloud
+    * [forward](https://github.com/fanux/forward) tornado framework wapper, a website with IM server
 
 * c++:
-    [tetris](https://github.com/fanux/tetris) just a game
+    * [tetris](https://github.com/fanux/tetris) just a game
 
 ## Skills
 * language:
