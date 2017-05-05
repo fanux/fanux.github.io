@@ -147,7 +147,7 @@ type ContainerServiceClient interface {
 }
 
 ```
-[containerd与shim通信模型介绍](demo/grpc/README.md)
+[containerd与shim通信模型介绍](../demo/grpc/README.md)
 
 再看shim与runc的关系，这个比较简单了，直接进入shim service 实现的Create方法即可
 ```
