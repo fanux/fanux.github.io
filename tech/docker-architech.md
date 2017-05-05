@@ -145,7 +145,9 @@ type ContainerServiceClient interface {
     Pty(ctx context.Context, in *PtyRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error)
     CloseStdin(ctx context.Context, in *CloseStdinRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error)
 }
+
 ```
+[containerd与shim通信模型介绍](demo/grpc/README.md)
 
 再看shim与runc的关系，这个比较简单了，直接进入shim service 实现的Create方法即可
 ```
