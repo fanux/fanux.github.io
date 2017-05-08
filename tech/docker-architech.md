@@ -182,7 +182,7 @@ func newInitProcess(context context.Context, path string, r *shimapi.CreateReque
     return p, nil
 }
 ```
-可以看到，在这里调用了runc的API去真正执行创建容器的操作。
+可以看到，在这里调用了runc的API去真正执行创建容器的操作。其本质是调用了`runc create --bundle [bundle] [containerid]` 命令,在此不多作介绍了
 
 ## docker-containerd-ctr 与 docker-containerd 
 ctr 是一个containerd的client，之间通过proto rpc通信, containerd监听了unix:///run/containerd/containerd.sock。
@@ -241,3 +241,9 @@ GLOBAL OPTIONS:
    --help, -h                        show help
    --version, -v                    print the version
 ```
+
+## 容器创建过程分析
+
+## 网络模块分析
+
+## 镜像模块分析
