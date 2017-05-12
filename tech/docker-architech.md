@@ -184,8 +184,15 @@ func newInitProcess(context context.Context, path string, r *shimapi.CreateReque
 ```
 可以看到，在这里调用了runc的API去真正执行创建容器的操作。其本质是调用了`runc create --bundle [bundle] [containerid]` 命令,在此不多作介绍了
 
-## shim进程与runc进程之间如何通信
+## shim进程与runc进程之间
 上文可知，shim进程创建runc子进程。
+
+## runc 与 容器内第一个进程 init进程
+看docker创建了这么多子进程，然后到了runc我们期待的自己Dockerfile中的CMD进程就要被创建了，想想都有点小激动，然而。。。
+
+runc进程启动后会去启动init进程，去创建容器，然后在容器中创建进程，那才是真正我们需要的进程
+
+关于runc init进程关键看StartInitialization方法（main_unix.go）
 
 ## docker-containerd-ctr 与 docker-containerd 
 ctr 是一个containerd的client，之间通过proto rpc通信, containerd监听了unix:///run/containerd/containerd.sock。
