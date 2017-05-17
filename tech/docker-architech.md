@@ -268,7 +268,8 @@ GLOBAL OPTIONS:
 
 ## 镜像模块分析
 
-## runc相关
+##  runc 架构破析
+比较复杂也比较重要，所以我将单独写一篇相关的介绍 [这里](http://lameleg.com/tech/runc.html)
 
 #### 使用runc直接创建容器
 ```
