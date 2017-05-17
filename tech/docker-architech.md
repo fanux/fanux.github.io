@@ -19,10 +19,20 @@ docker-runc
 * dockerd与containerd通过rpc进行通信（待验证，可能是通过ctr）
 * ctr是containerd的cli
 * containerd通过shim操作runc，runc真正控制容器生命周期
-* 启动一个容器就会启动一个shim进程，shim与容器中进程是父子或孙等关系(待验证)
+* 启动一个容器就会启动一个shim进程
 * shim直接调用runc的包函数,shim与containerd之前通过rpc通信
+* 真正用户想启动的进程由runc的init进程启动，即`runc init [args ...]`
 
-以上结论不一定正确，有待验证
+进程关系模型：
+```
+docker     ctr
+  |         |
+  V         V
+dockerd -> containerd ---> shim -> runc -> runc init -> process
+                      |-- > shim -> runc -> runc init -> process
+                      +-- > shim -> runc -> runc init -> process
+```
+
 
 ```
 [root@docker-build-86-050 ~]# ps -aux|grep docker
