@@ -257,3 +257,18 @@ GLOBAL OPTIONS:
 ## 网络模块分析
 
 ## 镜像模块分析
+
+## runc相关
+
+#### 使用runc直接创建容器
+```
+mkdir /mycontainer
+cd /mycontainer
+mkdir rootfs
+docker export $(docker create busybox) | tar -C rootfs -xvf -
+# 生成容器的配置文件config.json
+runc spec
+runc run mycontainerid
+```
+#### 容器状态文件 
+默认存在/run/runc目录下,不管是docker engine创建的容器还是通过runc直接创建的容器都会在/run/runc目录下创建一个以容器名命名的目录，下面有个state.json文件用于存储文件状态
