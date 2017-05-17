@@ -74,6 +74,8 @@
     * click - 一键构建集群工具
     * cattle - 弹性调度引擎
 
+* [更多展示](product-show.md)
+
 ## 精品文章
 * [docker入门教程](docker-course.md)
 * [swarm容器集群管理](swarm-cluster-manage.md)
