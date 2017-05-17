@@ -1,4 +1,80 @@
 ## docker开发流程
+注意容器构建时的信息：
+```
+Install runc version 992a5be178a62e026f4069f443c6164912adbf09
++ git clone https://github.com/opencontainers/runc.git /tmp/tmp.NdftaLJucp/src/github.com/opencontainers/runc
+Cloning into '/tmp/tmp.NdftaLJucp/src/github.com/opencontainers/runc'...
++ cd /tmp/tmp.NdftaLJucp/src/github.com/opencontainers/runc
++ git checkout -q 992a5be178a62e026f4069f443c6164912adbf09
++ make BUILDTAGS=seccomp apparmor selinux static
+CGO_ENABLED=1 go build -i -tags "seccomp apparmor selinux cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit="992a5be178a62e026f4069f443c6164912adbf09" -X main.version=1.0.0-rc3" -o runc .
+CGO_ENABLED=1 go build -i -tags "seccomp apparmor selinux cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit="992a5be178a62e026f4069f443c6164912adbf09" -X main.version=1.0.0-rc3" -o contrib/cmd/recvtty/recvtty ./contrib/cmd/recvtty
++ cp runc /usr/local/bin/docker-runc
++ install_containerd static
++ echo Install containerd version 8ef7df579710405c4bb6e0812495671002ce08e0
+Install containerd version 8ef7df579710405c4bb6e0812495671002ce08e0
++ git clone https://github.com/containerd/containerd.git /tmp/tmp.NdftaLJucp/src/github.com/containerd/containerd
+Cloning into '/tmp/tmp.NdftaLJucp/src/github.com/containerd/containerd'...
++ cd /tmp/tmp.NdftaLJucp/src/github.com/containerd/containerd
++ git checkout -q 8ef7df579710405c4bb6e0812495671002ce08e0
++ make static
+cd ctr && go build -ldflags "-w -extldflags -static -X github.com/containerd/containerd.GitCommit=8ef7df579710405c4bb6e0812495671002ce08e0 " -tags "" -o ../bin/ctr
+cd containerd && go build -ldflags "-w -extldflags -static -X github.com/containerd/containerd.GitCommit=8ef7df579710405c4bb6e0812495671002ce08e0 " -tags "" -o ../bin/containerd
+cd containerd-shim && go build -ldflags "-w -extldflags -static -X github.com/containerd/containerd.GitCommit=8ef7df579710405c4bb6e0812495671002ce08e0 " -tags "" -o ../bin/containerd-shim
++ cp bin/containerd /usr/local/bin/docker-containerd
++ cp bin/containerd-shim /usr/local/bin/docker-containerd-shim
++ cp bin/ctr /usr/local/bin/docker-containerd-ctr
++ echo Install tini version 949e6facb77383876aeff8a6944dde66b3089574
++ git clone https://github.com/krallin/tini.git /tmp/tmp.NdftaLJucp/tini
+Install tini version 949e6facb77383876aeff8a6944dde66b3089574
+Cloning into '/tmp/tmp.NdftaLJucp/tini'...
++ cd /tmp/tmp.NdftaLJucp/tini
++ git checkout -q 949e6facb77383876aeff8a6944dde66b3089574
++ cmake .
+-- The C compiler identification is GNU 4.9.2
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Performing Test HAS_BUILTIN_FORTIFY
+-- Performing Test HAS_BUILTIN_FORTIFY - Failed
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/tmp.NdftaLJucp/tini
++ make tini-static
+Scanning dependencies of target tini-static
+[100%] Building C object CMakeFiles/tini-static.dir/src/tini.c.o
+Linking C executable tini-static
+[100%] Built target tini-static
++ cp tini-static /usr/local/bin/docker-init
++ export CGO_ENABLED=0
++ install_proxy
++ echo Install docker-proxy version 7b2b1feb1de4817d522cc372af149ff48d25028e
+Install docker-proxy version 7b2b1feb1de4817d522cc372af149ff48d25028e
++ git clone https://github.com/docker/libnetwork.git /tmp/tmp.NdftaLJucp/src/github.com/docker/libnetwork
+Cloning into '/tmp/tmp.NdftaLJucp/src/github.com/docker/libnetwork'...
++ cd /tmp/tmp.NdftaLJucp/src/github.com/docker/libnetwork
++ git checkout -q 7b2b1feb1de4817d522cc372af149ff48d25028e
++ go build -ldflags= -o /usr/local/bin/docker-proxy github.com/docker/libnetwork/cmd/proxy
++ install_bindata
++ echo Install go-bindata version a0ff2567cfb70903282db057e799fd826784d41d
++ git clone https://github.com/jteeuwen/go-bindata /tmp/tmp.NdftaLJucp/src/github.com/jteeuwen/go-bindata
+Install go-bindata version a0ff2567cfb70903282db057e799fd826784d41d
+Cloning into '/tmp/tmp.NdftaLJucp/src/github.com/jteeuwen/go-bindata'...
++ cd /tmp/tmp.NdftaLJucp/src/github.com/jteeuwen/go-bindata
++ git checkout -q a0ff2567cfb70903282db057e799fd826784d41d
++ go build -o /usr/local/bin/go-bindata github.com/jteeuwen/go-bindata/go-bindata
++ install_dockercli
++ echo Install docker/cli version 7230906e0e297999eb33da74e0279c5cf41a119e
++ git clone https://github.com/dperny/cli /tmp/tmp.NdftaLJucp/src/github.com/docker/cli
+Install docker/cli version 7230906e0e297999eb33da74e0279c5cf41a119e
+Cloning into '/tmp/tmp.NdftaLJucp/src/github.com/docker/cli'...
++ cd /tmp/tmp.NdftaLJucp/src/github.com/docker/cli
++ git checkout -q 7230906e0e297999eb33da74e0279c5cf41a119e
++ go build -o /usr/local/bin/docker github.com/docker/cli/cmd/docker
++ [ 1 -eq 1 ]
++ rm -rf /tmp/tmp.NdftaLJucp
+```
 
 ### 编译docker源码
 clone moby
