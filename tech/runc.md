@@ -114,3 +114,20 @@ newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, stateDirFD i
     }
 ```
 
+### 切换rootfs
+这里有个有意思的地方，我们ShowLog的作用是往`/log`文件中写日志，请看下面：
+```
+    utils.ShowLog("2 - linuxSetnsInit Init")
+    // prepareRootfs() can be executed only for a new mount namespace.
+    if l.config.Config.Namespaces.Contains(configs.NEWNS) {
+        if err := prepareRootfs(l.pipe, l.config.Config); err != nil {
+            return err
+        }
+    }
+    utils.ShowLog("3 - linuxSetnsInit Init")
+```
+上面一条ShowLog会写到宿主机的`/ShowLog`文件中，而 下面一个ShowLog因为已经切换了rootfs会写到容器里面的
+`/log`文件中
+
+## 总结
+至此我们容器创建流程大的架构梳理了一遍，为了看清整个架构忽略了很多细节，当然我会在其它文章中介绍别的一些细节内容. 欢迎大家关注[sealyun](lameleg.com)
