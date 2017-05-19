@@ -261,13 +261,6 @@ GLOBAL OPTIONS:
    --help, -h                        show help
    --version, -v                    print the version
 ```
-
-## 容器创建过程分析
-
-## 网络模块分析
-
-## 镜像模块分析
-
 ##  runc 架构破析
 比较复杂也比较重要，所以我将单独写一篇相关的介绍 [这里](http://lameleg.com/tech/runc.html)
 
