@@ -104,6 +104,7 @@ $ docker-compose -f docker-compose-swarm-join.yml up -d
 ```
 ### 安装Dface
 依次执行两个compose文件：
+
 ```
 [root@yjybj-3-031 dface]# cat docker-compose-dependson.yml  #啥都不用改
 version: '2'
