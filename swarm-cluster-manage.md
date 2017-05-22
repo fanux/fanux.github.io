@@ -109,20 +109,6 @@ $ docker-compose -f docker-compose-swarm-join.yml up -d
 [root@yjybj-3-031 dface]# cat docker-compose-dependson.yml  #啥都不用改
 version: '2'
 services:
-    db:
-     container_name: pbrain-db
-     image: reg.iflytek.com/release/postgres:latest
-     environment:
-       POSTGRES_USER: shipyard 
-       POSTGRES_DB: shipyard 
-       POSTGRES_PASSWORD: 111111 
-     network_mode: "host"
-     command: postgres
-    mq:
-       container_name: pbrain-mq
-       image: reg.iflytek.com/release/gnatsd:latest
-       command: gnatsd
-       network_mode: "host"
     rethinkdb:
       container_name: shipyard-rethinkdb
       command: rethinkdb  
@@ -132,12 +118,6 @@ services:
 [root@yjybj-3-031 dface]# cat docker-compose.yml 
 version: '2'
 services:
-    pbrain:
-      container_name: pbrain
-      command: pbrain manager -o http://172.26.3.31:8888 --docker-host tcp://swarm.iflytek.com:4000 # -o 支持dface跨域请求，写dface地址
-      network_mode: "host"
-      image: reg.iflytek.com/release/pbrain:latest
-
     shipyard:
       container_name: dface     # 不用改
       command: controller server --listen :8888 -d tcp://swarm.iflytek.com:4000 --rethinkdb-addr localhost:28015  --rethinkdb-database "dface" 
