@@ -49,6 +49,16 @@ fmt.Println("cmd is: ", c.initArgs[0], c.initArgs[1:])
 //cmd is:  /proc/self/exe [init]
 ```
 linux菜鸟表示看不懂了，`/proc/self/exe`是什么鬼？赶紧百度一下。强(sha)大(bi)百度告诉我们这代表当前进程，所以实际上是想调用`runc init`
+```
+[root@dev-86-206 ~]# ll /proc/self
+lrwxrwxrwx. 1 root root 0 4月  24 19:56 /proc/self -> 108590
+```
+```
+[root@dev-86-206 ~]# ll /proc/108590
+总用量 0
+lrwxrwxrwx.  1 root root 0 5月  31 15:25 exe -> /go/bin/cattle
+```
+是不是明白了什么，最终/proc/self/exe链接到自己了
 
 ## runc run进程与runc init进程之间的通信
 #### runc run进程
