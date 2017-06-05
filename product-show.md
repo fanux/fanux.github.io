@@ -7,4 +7,4 @@
 ## 容器UI - 容器webUI，在界面上管理容器，镜像和节点等
 ![](images/containers.png)
 ## 高大上的监控，告警系统 
-![](images/monitor.png)
+![](images/monitor2.png)
