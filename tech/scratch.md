@@ -1,4 +1,4 @@
-## 如何让镜像尽可能小
+# 如何让镜像尽可能小
 很容器想到from scratch, 就是没任何基础镜像
 ```
 FROM scratch
@@ -24,7 +24,7 @@ ENTRYPOINT ["/p"]
 standard_init_linux.go:175: exec user process caused "no such file or directory”
 ```
 
-静态编译：
+静态编译的bin程序,这是我们scratch需要的：
 ```
 [root@dev-86-205 ci-sftp]# ldd p
     不是动态可执行文件
@@ -34,3 +34,5 @@ golang中静态编译命令：
 ```
 go build --ldflags '-linkmode external -extldflags "-static”'
 ```
+
+如果不静态编译那可能得拷贝一堆动态库到镜像中，很多lowB就是那么做的
