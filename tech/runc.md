@@ -125,12 +125,16 @@ newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, stateDirFD i
 ```
 
 ### 切换rootfs
-    这里有个有意思的地方，我们ShowLo`
+    这里有个有意思的地方，我们使用dlv调试runc
+```
+root@1db95ddcd993:/go/src/pro/ci-sftp# dlv --wd ./ exec runc -- run test
+```
+```
 (dlv) break main.main
 Breakpoint 1 set at 0x6c8a0b for main.main() /go/src/github.com/opencontainers/runc/main.go:51
 (dlv) continue
 > main.main() /go/src/github.com/opencontainers/runc/main.go:51 (hits goroutine(1):1 total:1) (PC: 0x6c8a0b)
-    46: value for "bundle" is the current directory.`
+    46: value for "bundle" is the current directory.
     47: )
     48:
     49:
