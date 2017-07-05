@@ -1,3 +1,7 @@
+一些工具安装：
+yum install bridge-utils  # 如果brctl不能用
+yum install net-tools     # 如果route命令不能用
+
 # 单节点上使用ovs vlan划分网络
 启动四个容器：
 ```
