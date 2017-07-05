@@ -262,6 +262,31 @@ PING 172.17.1.1 (172.17.1.1) 56(84) bytes of data.
 ```
 以上操作就是docker bridge模式的模型
 
+### 用ip命令配置docker网络
+我们如果需要对容器网络进行配置，如修改ip地址，进入到容器里面显然不合适，而且有时不使用特权模式时是操作不了的，不过我们可以使用ip命令对其进行操作。
+
+```
+docker run -itd --name test ubuntu:14.04 /bin/bash
+```
+这时namespace其实已经建立了，不过使用ip命令看不到
+```
+docker inspect --format '{{ .State.Pid }}' test
+3847
+mkdir /var/run/netns # 如果不存在才创建
+ln -s /proc/3847/ns/net /var/run/netns/test
+```
+测试：
+```
+# ip netns list
+test
+
+[root@dev-86-208 ~]# ip netns exec test1 ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+253: eth0@if254: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+
 ### bridge实现源码解析
 #### docker0网桥的建立
 #### 创建容器时宿主机上的网络操作
