@@ -255,6 +255,12 @@ PING 172.17.1.1 (172.17.1.1) 56(84) bytes of data.
 当然想在主机上能ping通容器的话需要给brtest加ip：
 ```
 [root@dev-86-208 ~]# ip addr add 172.17.1.254/24 dev brtest
+
+[root@dev-86-208 ~]# route -n # 上面动作设置了路由
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+172.17.1.0      0.0.0.0         255.255.255.0   U     0      0        0 brtest
+
 [root@dev-86-208 ~]# ping 172.17.1.1
 PING 172.17.1.1 (172.17.1.1) 56(84) bytes of data.
 64 bytes from 172.17.1.1: icmp_seq=1 ttl=64 time=0.046 ms
