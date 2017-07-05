@@ -96,12 +96,6 @@ docker network inspect bridge 看一下,这是给容器内部分配的地址：
 ```
 单有这些还不够，还需要iptables对包作一些处理,下文细说。有了这些理论，再去顺着这个思路去读网络模块的代码
 
-### bridge实现源码解析
-##### docker0网桥的建立
-##### 创建容器时宿主机上的网络操作
-##### 创建容器时容器内部的网络操作
-### overlay网络代表flannel原理
-
 ## network namespace实践
 使用ip命令，如果没有的话安装一下：`yum install net-tools`
 
@@ -267,3 +261,11 @@ PING 172.17.1.1 (172.17.1.1) 56(84) bytes of data.
 64 bytes from 172.17.1.1: icmp_seq=2 ttl=64 time=0.030 ms
 ```
 以上操作就是docker bridge模式的模型
+
+### bridge实现源码解析
+#### docker0网桥的建立
+#### 创建容器时宿主机上的网络操作
+#### 创建容器时容器内部的网络操作
+### overlay网络代表flannel原理
+
+
