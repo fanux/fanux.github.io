@@ -73,3 +73,76 @@ pipework ovs0 con4 192.168.0.4/24 @200
 同样要桥接eth0到ovs0上,同host1的操作，然后con1与con3可通，con2与con4可通.
 
 # GRE实现overlay网络
+linux内核需要3.11以上，本尊在3.10内核上实践失败，在虚拟机中升级内核时虚拟机启动不了，CPU飙到100%，以后再试。
+
+# Vxlan实现跨主机通信
+```
+   host1:10.1.86.203 
+   ovs0
+    |
+    |-veth1 <-------> eth1 192.168.0.3  con3
+    |
+    |-vxlan1-------------+
+    |                    |
+                         |
+    host2:10.1.86.204    |
+    ovs0                 |
+     |                   |
+     |-vxlan1------------+
+     |
+     |-veth1 <--------> eth1 192.168.0.4 con4
+     |
+```
+可以看到con3和con4在搭建vxlan之前是无法通信的。
+
+在host1上：
+```
+[root@dev-86-203 ~]# docker run --name con3 -itd ubuntu:14.04 /bin/bash
+[root@dev-86-203 ~]# ovs-vsctl add-br ovs0
+[root@dev-86-203 ~]# pipework ovs0 con3 192.168.0.3/24   # 给容器分配地址并挂到ovs0上
+
+[root@dev-86-203 ~]# ovs-vsctl add-port ovs0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=10.1.86.204 options:key=flow # 创建vxlan
+
+[root@dev-86-203 ~]# ovs-vsctl show
+5e371797-db70-451c-a0f2-d70c6d00cd05
+    Bridge "ovs0"
+        Port "veth1pl3342"
+            Interface "veth1pl3342"
+        Port "ovs0"
+            Interface "ovs0"
+                type: internal
+        Port "vxlan1"
+            Interface "vxlan1"
+                type: vxlan
+                options: {key=flow, remote_ip="10.1.86.204"}
+    ovs_version: "2.5.1"
+```
+host2上同理：
+```
+[root@dev-86-204 ~]# docker run --name con4 -itd ubuntu:14.04 /bin/bash
+[root@dev-86-204 ~]# ovs-vsctl add-br ovs0
+[root@dev-86-204 ~]# pipework ovs0 con4 192.168.0.4/24   # 给容器分配地址并挂到ovs0上
+
+[root@dev-86-204 ~]# ovs-vsctl add-port ovs0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=10.1.86.203 options:key=flow # 创建vxlan
+
+[root@dev-86-204 ~]# ovs-vsctl show
+c5ddf9e8-daac-4ed2-80f5-16e6365425fa
+    Bridge "ovs0"
+        Port "ovs0"
+            Interface "ovs0"
+                type: internal
+        Port "veth1pl52846"
+            Interface "veth1pl52846"
+        Port "vxlan1"
+            Interface "vxlan1"
+                type: vxlan
+                options: {key=flow, remote_ip="10.1.86.203"}
+    ovs_version: "2.5.1"
+```
+验证：
+```
+[root@dev-86-204 ~]# docker exec con4 ping 192.168.0.3  # con4容器中ping con3的地址，可通
+PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.
+64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.251 ms
+64 bytes from 192.168.0.3: icmp_seq=2 ttl=64 time=0.170 ms
+```
