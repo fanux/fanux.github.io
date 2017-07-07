@@ -1,5 +1,6 @@
 一些工具安装：
 yum install bridge-utils  # 如果brctl不能用
+
 yum install net-tools     # 如果route命令不能用
 
 # 单节点上使用ovs vlan划分网络
@@ -35,6 +36,7 @@ pipework ovs0 con1 192.168.0.1/24 @100
 pipework ovs0 con2 192.168.0.2/24 @200
 ```
 如果是单张网卡的话，把eth0桥接到switch上时会造成网络中断，所以以下几步不要通过ssh操作：
+如果非得ssh去操作的话把以下命令放在一条命令中执行（用&&连接各个命令）
 ```
 ovs-vsctl add-port ovs0 eth0
 ifconfig ovs0 10.1.86.201 netmask 255.255.255.0   # 这里地址和掩码与eth0的配置一致
