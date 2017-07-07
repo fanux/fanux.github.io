@@ -15,6 +15,7 @@
      yum-config-manager --disable docker-ce-edge
      yum makecache fast
      yum install docker-ce
+     service docker start
 
 
 安装open vswitch:
