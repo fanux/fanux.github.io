@@ -1,3 +1,38 @@
+# 初始化环境
+```
+升级内核：
+      rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+      rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+      yum --enablerepo=elrepo-kernel install  kernel-ml-devel kernel-ml
+      awk -F\' '$1=="menuentry " {print $2}' /etc/grub2.cfg
+      grub2-set-default 0
+      reboot
+      uname -a
+
+安装docker:
+     yum install -y yum-utils
+     yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+     yum-config-manager --disable docker-ce-edge
+     yum makecache fast
+     yum install docker-ce
+
+
+安装open vswitch:
+     yum -y install wget openssl-devel gcc make python-devel openssl-devel kernel-devel graphviz kernel-debug-devel autoconf automake rpm-build redhat-rpm-config libtool python-twisted-core python-zope-interface PyQt4 desktop-file-utils libcap-ng-devel groff checkpolicy selinux-policy-devel
+     adduser ovs
+     su - ovs
+     yum localinstall /home/ovs/rpmbuild/RPMS/x86_64/openvswitch-2.5.0-1.el7.centos.x86_64.rpm -y
+     systemctl start openvswitch.service
+     systemctl is-active openvswitch
+     ovs-vsctl -V
+     systemctl enable openvswitch
+
+安装pipework:
+     yum install git
+     git clone https://github.com/jpetazzo/pipework
+     cp pipework/pipework /bin
+```
+
 一些工具安装：
 yum install bridge-utils  # 如果brctl不能用
 
