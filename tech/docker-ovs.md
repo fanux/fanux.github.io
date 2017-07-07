@@ -111,6 +111,13 @@ pipework ovs0 con4 192.168.0.4/24 @200
 # GRE实现overlay网络
 linux内核需要3.11以上，本尊在3.10内核上实践失败，在虚拟机中升级内核时虚拟机启动不了，CPU飙到100%，以后再试。
 
+发现把容器直接挂ovs网桥上是可以通的
+
+gre与下面的vxlan非常类似，只需要在添加往外连的端口时改成下面命令即可：
+```
+ovs-vsctl add-port ovs0 gre0 -- set interface gre0 type=gre options:remote_ip=172.31.244.185
+```
+
 # Vxlan实现跨主机通信
 ```
    host1:10.1.86.203 
