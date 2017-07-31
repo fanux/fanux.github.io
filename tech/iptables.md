@@ -34,9 +34,20 @@ FORWARD    |true   | false| true  |false
 OUTPUT     |true   |true  |true   |true
 POSTROUTING |false | true|true    |false
 
-## 创建一个新链
+## 创建一个自定义链
 ```
 iptables -t filter -N newchain # 创建链
 iptables -t filter -A newchain -s 192.168.75.9 -j DROP # 往链中添加规则
-iptables -A INPUT -j newchain # 创建的链在INPUT链中生效
+iptables -A INPUT -j newchain # 创建的链在INPUT链中生效,创建的链往哪接
 ```
+
+## 命令结构
+```
+iptables [-t table]  # 指定表名
+         command     # 对链操作命令
+         [chain]     # 链名
+         [rules]     # 规则，包是否匹配该条规则
+         [-j target] # 符合规则的数据包采取什么动作
+```
+
+## neutron中的自定义链

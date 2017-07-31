@@ -128,8 +128,6 @@ newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, stateDirFD i
     这里有个有意思的地方，我们使用dlv调试runc
 ```
 root@1db95ddcd993:/go/src/pro/ci-sftp# dlv --wd ./ exec runc -- run test
-```
-```
 (dlv) break main.main
 Breakpoint 1 set at 0x6c8a0b for main.main() /go/src/github.com/opencontainers/runc/main.go:51
 (dlv) continue
@@ -145,8 +143,6 @@ Breakpoint 1 set at 0x6c8a0b for main.main() /go/src/github.com/opencontainers/r
     54:     app.Usage = usage
     55:
     56:     var v []string
-```
-```
 (dlv) next
 > main.main() /go/src/github.com/opencontainers/runc/main.go:54 (PC: 0x6c8a50)
     49:
@@ -163,6 +159,7 @@ Breakpoint 1 set at 0x6c8a0b for main.main() /go/src/github.com/opencontainers/r
 (dlv) p app.Name
 "runc"
 ```
+
 [delve command line](https://github.com/derekparker/delve/tree/master/Documentation/cli)
 
 ## 总结
