@@ -9,3 +9,5 @@
 * [程序员解放革命](tech/revolution.md)
 * [docker scratch镜像](tech/scratch.md)
 * [iptables教程](tech/iptables.md)
+* [论CI CD](tech/CI-CD.md)
+* [Sealyun商业版优势分析](tech/sealyun-strengths.md)
