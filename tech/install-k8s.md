@@ -9,9 +9,49 @@ swapoff -a
 
 > 装这两工具如果没装的话
 
-yum install -y ebtables socat
+yum install -y ebtables soca
+
+> IPv4 iptables 链设置 CNI插件需要
+
+sysctl net.bridge.bridge-nf-call-iptables=1
 
 ### 墙外安装 
+在国内是很难使用这种方式安装了，推荐查看离线安装的方案
+
+> 装docker
+
+yum install -y docker
+systemctl enable docker && systemctl start docker
+
+> 装kubeadm kubectl kubelet
+
+```
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+setenforce 0
+yum install -y kubelet kubeadm kubectl
+systemctl enable kubelet && systemctl start kubelet
+```
+
+> 关闭SElinux
+
+setenforce 0
+
+cat <<EOF >  /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system
+
+然后与离线安装启动master无异, kubeadm init
 
 ### 离线安装
 
