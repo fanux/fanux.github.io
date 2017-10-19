@@ -138,6 +138,11 @@ as root:
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+#### 安装calico网络
+```
+kubectl apply -f https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
+```
+
 #### join node节点
 同样到node节点安装kubelet和kubeadm，和master节点操作一样，不再赘述。
 然后执行master节点init输出的那个命令：
@@ -156,11 +161,6 @@ dev-86-202   NotReady   master    17h       v1.8.1
 注意，master节点默认是不作为node的，也不推荐做node节点。 如果需要把master当node:
 ```
 [root@dev-86-202 ~]# kubectl taint nodes --all node-role.kubernetes.io/master-
-```
-
-#### 安装calico网络
-```
-kubectl apply -f https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
 ```
 
 #### 安装dashboard
