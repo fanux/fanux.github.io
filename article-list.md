@@ -12,3 +12,5 @@
 * [论CI CD](tech/CI-CD.md)
 * [Sealyun商业版优势分析](tech/sealyun-strengths.md)
 * [论微架构](tech/micro-architecture.md)
+* [docker build做了哪些事](tech/docker-build.md)
+* [k8s1.8风骚安装指南](tech/install-k8s.md)
