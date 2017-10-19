@@ -9,7 +9,7 @@ swapoff -a
 
 > 装这两工具如果没装的话
 
-yum install -y ebtables soca
+yum install -y ebtables socat
 
 > IPv4 iptables 链设置 CNI插件需要
 
