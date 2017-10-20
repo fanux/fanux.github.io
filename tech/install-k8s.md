@@ -220,11 +220,14 @@ vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs  #这个配置与docker改成一致
 
 > 节点not ready ?
+
 建议安装calico网络，如果要把主节点当成node节点需要加个命令：
 ```
+[root@dev-86-202 ~]# kubectl taint nodes --all node-role.kubernetes.io/master-
 ```
 
 > dashboard 访问不了？
+
 如果是NodePort方式访问，那需要知道dashboard服务具体调度到哪个节点上去了。访问那个节点的ip而不是master的ip。
 不行的话把https 改成http试试。
 
@@ -234,4 +237,5 @@ kubectl get pod -n kube-system -o wide
 ```
 
 > 拉取镜像失败？
+
 可以把node节点与master节点的镜像都在每个节点load一下。
