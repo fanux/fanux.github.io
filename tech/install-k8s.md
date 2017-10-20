@@ -203,3 +203,32 @@ subjects:
 kubectl create -f dashboard-admin.yaml
 
 然后在界面上直接点skip就可以了，不过你懂的，这很不安全。  真正安全的做法 请关注我进一步讨论：https://github.com/fanux
+
+### 常见问题
+> kubelet服务启动不了？
+
+cgroup driver配置要相同
+
+查看docker cgroup driver:
+```
+docker info|grep Cgroup
+```
+有systemd和cgroupfs两种，把kubelet service配置改成与docker一致
+
+vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs  #这个配置与docker改成一致
+
+> 节点not ready ?
+建议安装calico网络，如果要把主节点当成node节点需要加个命令：
+```
+```
+
+> dashboard 访问不了？
+如果是NodePort方式访问，那需要知道dashboard服务具体调度到哪个节点上去了。访问那个节点的ip而不是master的ip。
+不行的话把https 改成http试试。
+
+查看具体在哪个节点
+```
+kubectl get pod -n kube-system -o wide
+```
