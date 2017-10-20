@@ -232,3 +232,6 @@ KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs  #这个配置与docker改成一致
 ```
 kubectl get pod -n kube-system -o wide
 ```
+
+> 拉取镜像失败？
+可以把node节点与master节点的镜像都在每个节点load一下。
