@@ -239,3 +239,29 @@ kubectl get pod -n kube-system -o wide
 > 拉取镜像失败？
 
 可以把node节点与master节点的镜像都在每个节点load一下。
+
+> dashboard crash, dns起不来？
+
+可以把node节点与master节点的镜像都在每个节点load一下。
+
+> 192.168网段与calico网段冲突？
+
+如果你恰好也是192.168网段，那么建议修改一下calico的网段
+
+这样init
+```
+kubeadm init --pod-network-cidr=192.168.122.0/24 --kubernetes-version v1.8.1
+```
+修改calico.yaml
+```
+    - name: FELIX_DEFAULTENDPOINTTOHOSTACTION
+      value: "ACCEPT"
+    # Configure the IP Pool from which Pod IPs will be chosen.
+    - name: CALICO_IPV4POOL_CIDR
+      value: "192.168.122.0/24"
+    - name: CALICO_IPV4POOL_IPIP
+      value: "always"
+    # Disable IPv6 on Kubernetes.
+    - name: FELIX_IPV6SUPPORT
+      value: "false"
+```
