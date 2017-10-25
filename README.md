@@ -127,5 +127,4 @@
 * 216 人/时
 
 ## 联系我们
-* Email: fhtjob@hotmail.com
-* 15805691422 steven fang
+* Email: lamelegdog@gmail.com
