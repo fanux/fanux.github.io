@@ -56,6 +56,11 @@ sysctl --system
 ### 离线安装
 
 福利，我已经把所有依赖的镜像，二进制文件，配置文件都打成了包，解决您所有依赖,花了很多时间整理这个，放在了阿里云市场上，希望大家给点小支持
+[赏我一杯咖啡](https://market.aliyun.com/products/56014009/cmxz022571.html#sku=yuncode1657100000)
+
+这包里面把大部分操作都写在简单的脚本里面了，在master节点执行 init-master.sh 在node节点执行init-node.sh 安装dashboard执行init-dashboard.sh。
+
+然后就可以在node节点执行master输出出来的join命令了。包的最大价值在于没有任何依赖了，再也不用访问不了国外某网而头疼了。
 
 #### 安装kubelet服务，和kubeadm
 > 下载bin文件 [地址](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.8.md#v181)
