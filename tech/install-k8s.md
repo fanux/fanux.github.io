@@ -270,3 +270,7 @@ kubeadm init --pod-network-cidr=192.168.122.0/24 --kubernetes-version v1.8.1
     - name: FELIX_IPV6SUPPORT
       value: "false"
 ```
+
+> dns 半天起不来？
+
+dns镜像如果load成功了的话，可能是机器配置太低，起的会非常慢，有朋友 单核2G上15分钟没启动成功。 建议双核4G以上资源
