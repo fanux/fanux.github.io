@@ -274,3 +274,15 @@ kubeadm init --pod-network-cidr=192.168.122.0/24 --kubernetes-version v1.8.1
 > dns 半天起不来？
 
 dns镜像如果load成功了的话，可能是机器配置太低，起的会非常慢，有朋友 单核2G上15分钟没启动成功。 建议双核4G以上资源
+
+> kubelet unhealthy?
+
+```
+[kubelet-check] The HTTP call equal to 'curl -sSL http://localhost:10255/healthz/syncloop' failed with error: Get http://localhost:10255/healthz/syncloop: dial tcp 127.0.0.1:10255: getsockopt: connection refused.
+[kubelet-check] It seems like the kubelet isn't running or healthy.
+```
+
+可能是manifast已经存在，删除即可：
+```
+[root@dev-86-205 kubeadm]# rm -rf /etc/kubernetes/manifests
+```
