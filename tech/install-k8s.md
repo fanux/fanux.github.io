@@ -275,6 +275,8 @@ kubeadm init --pod-network-cidr=192.168.122.0/24 --kubernetes-version v1.8.1
 
 dns镜像如果load成功了的话，可能是机器配置太低，起的会非常慢，有朋友 单核2G上15分钟没启动成功。 建议双核4G以上资源
 
+如果还起不来请kubeadm reset重来一下，有客户是通过这种方式解决这个问题的.
+
 > kubelet unhealthy?
 
 ```
@@ -286,3 +288,14 @@ dns镜像如果load成功了的话，可能是机器配置太低，起的会非�
 ```
 [root@dev-86-205 kubeadm]# rm -rf /etc/kubernetes/manifests
 ```
+
+> 时间超过24小时，节点加不进去？
+
+```
+[root@dev-86-208 test]# kubeadm token create
+[kubeadm] WARNING: starting in 1.8, tokens expire after 24 hours by default (if you require a non-expiring token use --ttl 0)
+887ac7.e82f0e13ad72c367
+```
+上面命令重新生成一下token，执行kubeadm join 时用上面的token替换一下，如果想永远不过期init时把ttl设置成0
+
+--token-ttl duration
