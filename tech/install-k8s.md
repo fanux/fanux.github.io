@@ -1,6 +1,10 @@
 ## 使用kubeadm部署k8s集群
 
 ### 基础环境
+> 关闭防火墙 selinux
+
+$ systemctl stop firewalld && systemctl disable firewalld
+$ setenforce 0
 
 > 关闭swap
 
@@ -108,7 +112,7 @@ EOF
 为了防止无法解析主机名，修改/etc/hosts把主机名与ip的映射写上
 
 #### 启动master节点
-这里得把google的一票镜像想办法弄下来，然而我已经打成了一个[tar包](TODO)
+这里得把google的一票镜像想办法弄下来
 
 ```
 kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version v1.8.0 --skip-preflight-checks
@@ -299,3 +303,5 @@ dns镜像如果load成功了的话，可能是机器配置太低，起的会非�
 上面命令重新生成一下token，执行kubeadm join 时用上面的token替换一下，如果想永远不过期init时把ttl设置成0
 
 --token-ttl duration
+
+
