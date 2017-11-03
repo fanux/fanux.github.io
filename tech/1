@@ -304,10 +304,6 @@ dns镜像如果load成功了的话，可能是机器配置太低，起的会非�
 
 --token-ttl duration
 
-> calico pod 中一个容器起不来，Calico node 'xxx' is already using the IPv4 address 192.168.152.65
+> Calico node 'xxx' is already using the IPv4 address 192.168.152.65
 
-```
-rm -rf /var/etcd/
-kubeadm reset
-```
-重装
+宿主机网段与calico网段冲突
