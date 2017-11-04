@@ -3,8 +3,10 @@ alico node 'iZ2ze3nu0s9j3v57be4xuuZ' is already using the IPv4 address 192.168.1
 ### 基础环境
 > 关闭防火墙 selinux
 
+```
 $ systemctl stop firewalld && systemctl disable firewalld
 $ setenforce 0
+```
 
 > 关闭swap
 
@@ -311,3 +313,11 @@ rm -rf /var/etcd/
 kubeadm reset
 ```
 重装
+
+> 卡在拉镜像的地方
+
+关闭防火墙和selinux
+```
+$ systemctl stop firewalld && systemctl disable firewalld
+$ setenforce 0
+```
