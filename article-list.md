@@ -15,3 +15,5 @@
 * [docker build做了哪些事](tech/docker-build.md)
 * [k8s1.8风骚安装指南](tech/install-k8s.md)
 * [阿里云产品分销说明](tech/sell.md)
+* [calico网络原理与实践](tech/calico.md)
+* [利用kubeadm构建高可用kubernetes集群](tech/install-k8s-cluster.md)
