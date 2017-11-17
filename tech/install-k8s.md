@@ -8,6 +8,9 @@ $ systemctl stop firewalld && systemctl disable firewalld
 $ setenforce 0
 ```
 
+> 打开forward
+sysctl -w net.ipv4.ip_forward=1
+
 > 关闭swap
 
 swapoff -a
@@ -321,3 +324,52 @@ kubeadm reset
 $ systemctl stop firewalld && systemctl disable firewalld
 $ setenforce 0
 ```
+
+```
+$ echo 'Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"' > /etc/systemd/system/kubelet.service.d/90-local-extras.conf
+$ systemctl daemon-reload
+$ systemctl restart kubelet
+```
+
+
+### 使用配置文件指定外部etcd集群
+config.yaml:
+```
+apiVersion: kubeadm.k8s.io/v1alpha1
+kind: MasterConfiguration
+etcd:
+  endpoints:
+  - http://10.1.245.94:2379
+networking:
+  podSubnet: 192.168.0.0/16
+kubernetesVersion: v1.8.1
+```
+
+etcd.yaml:
+```
+version: '2'
+services:
+    etcd:
+        container_name: etcd_infra0
+        image: quay.io/coreos/etcd:v3.1.10
+        command: |
+                etcd --name infra0
+                --initial-advertise-peer-urls http://10.1.245.94:2380
+                --listen-peer-urls http://10.1.245.94:2380
+                --listen-client-urls http://10.1.245.94:2379,http://127.0.0.1:2379
+                --advertise-client-urls http://10.1.245.94:2379
+                --data-dir /etcd-data.etcd
+                --initial-cluster-token etcd-cluster-1
+                -initial-cluster infra0=http://10.1.245.94:2380
+                --initial-cluster-state new
+        volumes:
+           - /data/etcd-data.etcd:/etcd-data.etcd
+        network_mode: "host"
+```
+
+```
+$ pip install docker-compose
+$ docker-compose -f etcd.yaml up -d
+$ kubeadm init --config config.yaml
+```
+
