@@ -1,114 +1,145 @@
-## 借助kubeadm构建企业级高可用k8s集群
+# 使用kubeadm安装安全高可用kubernetes集群
 
-### 构建etcd集群
+## 系统架构图
+```
+          kubectl dashboard
+                 |
+                 V 
+     +------------------------+ join
+     | LB  10.1.245.94        | <--- Nodes
+     +------------------------+
+     |                                                   
+     |--master1 manager1 schedule1   10.1.245.93                                                
+     |--master2 manager2 schedule2   10.1.245.95    =============>  etcd cluster  http://10.1.245.93:2379,http://10.1.245.94:2379,http://10.1.245.95:2379
+     |--master3 manager3 schedule3   10.1.245.94                                              
+```
+
+## 起动etcd集群
+cat etcd.yaml
 ```
 version: '2'
 services:
     etcd:
         container_name: etcd_infra0
-        image: 172.16.59.153/develop/etcd:2.3.1
+        image: quay.io/coreos/etcd:v3.1.10
         command: |
                 etcd --name infra0
-                --initial-advertise-peer-urls http://172.16.59.151:2380
-                --listen-peer-urls http://172.16.59.151:2380
-                --listen-client-urls http://172.16.59.151:2379,http://127.0.0.1:2379
-                --advertise-client-urls http://172.16.59.151:2379
+                --initial-advertise-peer-urls http://10.1.245.94:2380
+                --listen-peer-urls http://10.1.245.94:2380
+                --listen-client-urls http://10.1.245.94:2379,http://127.0.0.1:2379
+                --advertise-client-urls http://10.1.245.94:2379
                 --data-dir /etcd-data.etcd
                 --initial-cluster-token etcd-cluster-1
-                --initial-cluster infra0=http://172.16.59.151:2380,infra1=http://172.16.59.152:2380,infra2=http://172.16.59.153:2380
+                -initial-cluster infra0=http://10.1.245.93:2380,infra1=http://10.1.245.94:2379,infra2=http://10.1.245.95:2379
                 --initial-cluster-state new
         volumes:
            - /data/etcd-data.etcd:/etcd-data.etcd
         network_mode: "host"
 ```
+其它两个节点照抄，修改ip即可
 
-### 配置apiserver使用外部etcd集群
+使用docker-compose启动，如果没装：
+```
+$ pip install docker-compose
+```
+三个节点分别启动：
+```
+$ docker-compose -f etcd.yaml up -d
+```
+
+检查是不是安装成功:
+```
+$ docker exec etcd_infra0 etcdctl menber list
+```
+
+## kubeadm配置
+config.yaml
 ```
 apiVersion: kubeadm.k8s.io/v1alpha1
 kind: MasterConfiguration
-#api:
-#  advertiseAddress: <address|string>
-#  bindPort: <int>
+apiServerCertSANs:
+- 10.1.245.93
+- 10.1.245.94
+- 10.1.245.95
+- 47.52.227.242
 etcd:
   endpoints:
   - http://10.1.245.94:2379
-  #caFile: <path|string>
-  #certFile: <path|string>
-  #keyFile: <path|string>
 networking:
-  #dnsDomain: <string>
-  #serviceSubnet: <cidr>
   podSubnet: 192.168.0.0/16
 kubernetesVersion: v1.8.2
-# cloudProvider: <string>
-# nodeName: <string>
-# authorizationModes:
-# - <authorizationMode1|string>
-# - <authorizationMode2|string>
-# token: <string>
-# tokenTTL: <time duration>
-# selfHosted: <bool>
-apiServerExtraArgs:
- etcd-servers: http://10.1.245.94:2379
-# controllerManagerExtraArgs:
-#   <argument>: <value|string>
-#   <argument>: <value|string>
-# schedulerExtraArgs:
-#   <argument>: <value|string>
-#   <argument>: <value|string>
-# apiServerCertSANs:
-# - <name1|string>
-# - <name2|string>
-# certificatesDir: <string>
-# imageRepository: <string>
-# unifiedControlPlaneImage: <string>
-# featureGates:
-#   <feature>: <bool>
-#  <feature>: <bool>
 ```
-kubeadm init --config config.yaml
-
-### 配置calico网络使用外部etcd集群
-
-### 启动多个apiserver manager sheduler
-
-### 负载均衡apiserver
-
-### kubeconfig文件配置负载均衡器地址
+注意版本号
+apiServerCertSANs与证书配置有关，把你所有master的ip和lb的ip都写进去，或者你允许的域名等
 ```
-kubectl config set-cluster kubernetes --server=https://47.52.227.242:6443 --kubeconfig=$HOME/.kube/config
+$ kubeadm init --config config.yaml
 ```
 
-### 配置认证信息
-```
-# 设置集群参数
-export KUBE_APISERVER="https://172.20.0.113:6443"
-kubectl config set-cluster kubernetes \
---certificate-authority=/etc/kubernetes/ssl/ca.pem \
---embed-certs=true \
---server=${KUBE_APISERVER} \
---kubeconfig=devuser.kubeconfig
+## 启动多个master
+> 别的master节点初始化好之后，把第一个master的/etc/kubernetes目录拷贝到别的master节点上
 
-# 设置客户端认证参数
-kubectl config set-credentials devuser \
---client-certificate=/etc/kubernetes/ssl/devuser.pem \
---client-key=/etc/kubernetes/ssl/devuser-key.pem \
---embed-certs=true \
---kubeconfig=devuser.kubeconfig
+```
+$ scp -r root@10.1.245.93:/etc/kubernetes /etc
+```
 
-# 设置上下文参数
-kubectl config set-context kubernetes \
---cluster=kubernetes \
---user=devuser \
---namespace=dev \
---kubeconfig=devuser.kubeconfig
+> 修改该目录下各conf的ip，改成本机ip, 如下命令搜出来的都要改
 
-# 设置默认上下文
-kubectl config use-context kubernetes --kubeconfig=devuser.kubeconfig
+```
+grep 245.93 . -rn
+```
+
+> 启动kubelet
+
+```
+systemctl start kubelet
+```
+
+## 启动loadbalance
+
+我比较推荐使用四层代理
+HAproxy配置:
+cat /root/haproxy/haproxy.cfg
+```
+global
+  daemon
+  log 127.0.0.1 local0
+  log 127.0.0.1 local1 notice
+  maxconn 4096
+
+defaults
+  log               global
+  retries           3
+  maxconn           2000
+  timeout connect   5s
+  timeout client    50s
+  timeout server    50s
+
+frontend k8s
+  bind *:6444
+  mode tcp
+  default_backend k8s-backend
+
+backend k8s-backend
+  balance roundrobin
+  mode tcp
+  server k8s-1 10.1.245.93:6443 check
+  server k8s-1 10.1.245.94:6443 check
+  server k8s-2 10.1.245.95:6443 check
 ```
 ```
-kubectl config get-contexts
-CURRENT   NAME              CLUSTER           AUTHINFO        NAMESPACE
-*         kubernetes        kubernetes        admin
-          default-context   default-cluster   default-admin
+docker run --net=host -v /root/haproxy:/usr/local/etc/haproxy --name ha -d haproxy:1.7
+```
+
+## join node节点
+还是在node节点执行第一个master输出的命令，不过IP换成LB的ip地址，就是上面haproxy的地址  如 
+```
+$ kubeadm join --token <token> 10.1.245.94:6444 --discovery-token-ca-cert-hash sha256:<hash>
+```
+
+## kubectl配置
+修改~/.kube/config文件,ip改成LB的ip 10.1.245.94:6444
+
+或者通过命令修改：
+```
+$ kubectl config set-cluster kubernetes --server=https://47.52.227.242:6443 --kubeconfig=$HOME/.kube/config
 ```

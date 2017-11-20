@@ -331,6 +331,12 @@ $ systemctl daemon-reload
 $ systemctl restart kubelet
 ```
 
+> Failed to get system container stats for "/system.slice/docker.service"
+kubelet启动参数加：
+```
+--runtime-cgroups=/systemd/system.slice --kubelet-cgroups=/systemd/system.slice
+```
+
 
 ### 使用配置文件指定外部etcd集群
 config.yaml:
