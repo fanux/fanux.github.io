@@ -332,10 +332,15 @@ $ systemctl restart kubelet
 ```
 
 > Failed to get system container stats for "/system.slice/docker.service"
+
 kubelet启动参数加：
 ```
 --runtime-cgroups=/systemd/system.slice --kubelet-cgroups=/systemd/system.slice
 ```
+
+> 节点无法加入
+
+dns没起来就join，或者服务器时间没同步
 
 
 ### 使用配置文件指定外部etcd集群
