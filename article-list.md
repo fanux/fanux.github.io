@@ -17,3 +17,4 @@
 * [阿里云产品分销说明](tech/sell.md)
 * [calico网络原理与实践](tech/calico.md)
 * [利用kubeadm构建高可用kubernetes集群](tech/install-k8s-cluster.md)
+* [kubernetes角色访问控制RBAC实战指南](tech/k8s-rbac.md)
