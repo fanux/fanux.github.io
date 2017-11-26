@@ -4,6 +4,12 @@
 ## 宗旨
 以最廉价的方式让您的企业获得容器技术
 
+## 精品文章
+* [docker入门教程](docker-course.md)
+* [swarm容器集群管理](swarm-cluster-manage.md)
+
+[更多文章](article-list.md)
+
 ## 容器创世说
 > 起初 神创造了服务器。
  
@@ -23,7 +29,7 @@
  
 > 神说，要管理Docker集群，Swarm就来了。事就这样成了。
  
-> 神用swarm管理集群，用compose启动容器。 神看着是好的。
+> 神用kubernetes管理集群，用yaml启动容器。 神看着是好的。
  
 > 神说，要有服务发现，和代码仓库，并和持续集成，各提交代码操作都触发构建容器镜像。事就这样成了。
  
@@ -113,12 +119,6 @@
     * mysql - 双主模式，挂了一个，还有一个～
 
 * [更多展示](product-show.md)
-
-## 精品文章
-* [docker入门教程](docker-course.md)
-* [swarm容器集群管理](swarm-cluster-manage.md)
-
-[更多文章](article-list.md)
 
 ## 案例分享
 
