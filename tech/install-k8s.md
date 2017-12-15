@@ -218,6 +218,11 @@ kubectl create -f dashboard-admin.yaml
 
 然后在界面上直接点skip就可以了，不过你懂的，这很不安全。  真正安全的做法 请关注我进一步讨论：https://github.com/fanux
 
+### 给节点加上角色
+```
+kubectl label node node1 kubernetes.io/role=node
+```
+
 ### 常见问题
 > kubelet服务启动不了？
 
