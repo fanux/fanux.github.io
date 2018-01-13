@@ -145,5 +145,7 @@ $ kubectl config set-cluster kubernetes --server=https://47.52.227.242:6443 --ku
 ```
 
 # 问题
-上述方式这样安装完是有问题的，用kubectl get node 只能看到一个master，虽然任意一个master挂了kubectl可以正常访问集群，但是dns什么的是无法切换到别的节点上的。
-要想看到三个master，必须到三个master上都执行kubeinit,把ca.crt ca.key拷贝到对应机器，要注意一定要使用相同根证书，不然会出证书错误。
+~~~上述方式这样安装完是有问题的，用kubectl get node 只能看到一个master，虽然任意一个master挂了kubectl可以正常访问集群，但是dns什么的是无法切换到别的节点上的。
+要想看到三个master，必须到三个master上都执行kubeinit,把ca.crt ca.key拷贝到对应机器，要注意一定要使用相同根证书，不然会出证书错误。~~~
+
+应该把证书都拷贝过去，只删除apiserver.crt 和apiserver.key
