@@ -149,3 +149,82 @@ $ kubectl config set-cluster kubernetes --server=https://47.52.227.242:6443 --ku
 要想看到三个master，必须到三个master上都执行kubeinit,把ca.crt ca.key拷贝到对应机器，要注意一定要使用相同根证书，不然会出证书错误。~~~
 
 应该把证书都拷贝过去，只删除apiserver.crt 和apiserver.key
+
+
+==================================华丽分割线===================================
+
+### 启动第一个master
+```
+apiVersion: kubeadm.k8s.io/v1alpha1
+kind: MasterConfiguration
+apiServerCertSANs:
+- 172.31.244.235
+- 172.31.244.236
+- 172.31.244.237
+- 172.31.244.238
+- master1
+- master2
+- master3
+- node1
+- 47.75.6.242
+
+etcd:
+  endpoints:
+  - http://172.31.244.235:2379
+
+apiServerExtraArgs:
+  endpoint-reconciler-type: lease
+
+networking:
+  podSubnet: 192.168.0.0/16
+kubernetesVersion: v1.9.1
+featureGates:
+   CoreDNS: true
+```
+### 创建网络
+kubectl apply -f calico.yaml
+
+### join node节点
+略
+
+### 启动别的master
+cp /etc/kubernetes/pki 到其它master节点相同目录, 其它两节点删除 apiserver.crt apiserver.key
+不删的话启动完了你只能看到一个master。 然后和master1一样去启动.
+
+### 启动多DNS副本
+```
+kubectl edit deploy coredns -n kube-system
+```
+replicas: 3
+
+```
+[root@master1 ~]# kubectl get pod -n kube-system -o wide|grep core
+coredns-65dcdb4cf-4j5s8                  1/1       Running   0          39m       192.168.137.65    master1
+coredns-65dcdb4cf-ngx4h                  1/1       Running   0          38s       192.168.180.1     master2
+coredns-65dcdb4cf-qbsr6                  1/1       Running   0          38s       192.168.166.132   node1
+```
+这样，启动了三个dns
+
+### 配置kubelet 与kubeproxy
+
+### DNS破坏性测试
+### 网络破坏性测试
+### master节点破坏性测试
+
+--------------------------再分割-------------------------
+# 安装etcd
+# 安装master0
+# 安装calico,替换etcd
+# 拷贝pki，貌似不需要删啥
+# 启动别的apiserver
+# 启动负载均衡器
+# 修改kubelet配置
+# 修改kubeproxy配置
+# 启动coreDNS副本
+
+
+# 启动三个busybox验证, 验证dns,创建pod和telnet 10.96.0.1 443
+# 删掉一个master
+# 再删掉一个master
+# 恢复一个master
+# 再删掉最后一个master 
