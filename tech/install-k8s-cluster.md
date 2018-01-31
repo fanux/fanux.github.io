@@ -212,19 +212,51 @@ coredns-65dcdb4cf-qbsr6                  1/1       Running   0          38s     
 ### master节点破坏性测试
 
 --------------------------再分割-------------------------
-# 安装etcd
-# 安装master0
-# 安装calico,替换etcd
-# 拷贝pki，貌似不需要删啥
-# 启动别的apiserver
-# 启动负载均衡器
-# 修改kubelet配置
-# 修改kubeproxy配置
-# 启动coreDNS副本
+### 安装etcd
+### 安装master0
+### 安装calico,替换etcd
+### 拷贝pki(删掉apiserver.crt apiserver.key)
+### 启动别的apiserver
+### 启动负载均衡器
+/etc/haproxy/haproxy.cfg : 
+```
+global
+  daemon
+  log 127.0.0.1 local0
+  log 127.0.0.1 local1 notice
+  maxconn 4096
 
+defaults
+  log               global
+  retries           3
+  maxconn           2000
+  timeout connect   5s
+  timeout client    50s
+  timeout server    50s
 
-# 启动三个busybox验证, 验证dns,创建pod和telnet 10.96.0.1 443
-# 删掉一个master
-# 再删掉一个master
-# 恢复一个master
-# 再删掉最后一个master 
+frontend k8s
+  bind *:6444
+  mode tcp
+  default_backend k8s-backend
+
+backend k8s-backend
+  balance roundrobin
+  mode tcp
+  server k8s-0 172.21.161.28:6443 check 
+  server k8s-1 172.21.161.29:6443 check 
+  server k8s-2 172.21.161.30:6443 check 
+```
+```
+docker  run --restart=always --net=host -v /etc/haproxy:/usr/local/etc/haproxy --name ha -d haproxy:1.7
+```
+### 修改kubelet配置
+修改node节点的kubelet配置为负载均衡器地址。 配置： /etc/kubernetes/kubelet.conf
+
+### 修改kubeproxy配置
+### 启动coreDNS副本
+
+### 启动三个busybox验证, 验证dns,创建pod和telnet 10.96.0.1 443
+### 删掉一个master
+### 再删掉一个master
+### 恢复一个master
+### 再删掉最后一个master 
