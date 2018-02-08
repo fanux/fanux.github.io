@@ -58,16 +58,30 @@ config.yaml
 apiVersion: kubeadm.k8s.io/v1alpha1
 kind: MasterConfiguration
 apiServerCertSANs:
-- 10.1.245.93
-- 10.1.245.94
-- 10.1.245.95
-- 47.52.227.242
+- 172.31.244.231
+- 172.31.244.232
+- 172.31.244.233
+- 172.31.244.234
+- master1
+- master2
+- master3
+- node1
+- 47.75.1.72
+
 etcd:
   endpoints:
-  - http://10.1.245.94:2379
+  - http://172.31.244.232:2379
+  - http://172.31.244.233:2379
+  - http://172.31.244.234:2379
+
+apiServerExtraArgs:
+  endpoint-reconciler-type: lease
+
 networking:
   podSubnet: 192.168.0.0/16
-kubernetesVersion: v1.8.2
+kubernetesVersion: v1.9.2
+featureGates:
+   CoreDNS: true
 ```
 注意版本号
 apiServerCertSANs与证书配置有关，把你所有master的ip和lb的ip都写进去，或者你允许的域名等
