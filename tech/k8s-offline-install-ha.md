@@ -6,6 +6,8 @@
  1. 解压后在master 上 cd shell  && sh init.sh ,然后sh master.sh（注意因为脚本用的相对路径所以不再当前目录会找不到文件）
  2. 在node上 cd shell && sh init.sh  。然后在node上执行master输出的join命令即可
 
+> **高可用如下**
+
 ## 提前准备
 
 假设构建一个3master+2node的k8s集群，需要5台节点共同的条件如下：
