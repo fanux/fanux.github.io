@@ -1,25 +1,17 @@
 # 使用kubeadm安装安全高可用kubernetes集群
 [安装包地址](https://market.aliyun.com/products/57742013/cmxz025618.html?spm=5176.730005.0.0.TFKV5K#sku=yuncode1961800000) 如非高可用安装请忽略此教程，直接看产品页的三步安装。
 
-> 总体流程：
-
 > **单个master流程：**
 
  1. 解压后在master 上 cd shell  && sh init.sh ,然后sh master.sh（注意因为脚本用的相对路径所以不再当前目录会找不到文件）
  2. 在node上 cd shell && sh init.sh  。然后在node上执行master输出的join命令即可
 
-> **多个master流程：**
-
- 1. 解压后在master 1~n上`sh init.sh` ，然后**不要执行`master.sh`** ，然后同步开始分发二进制包给其它node，然后同时加载`init.sh` 提高部署效率
- 2. 在上述节点init.sh完成后，如果是虚拟机创建，建议给每个节点做个**快照**，方便后续有问题可以快速重构而不用全部重来  **（可选）**
- 3. ​跳至文档<u>启动etcd集群</u> 小节开始
-
 ## 提前准备
 
-假设构建一个2master+3node的k8s集群，需要5台节点共同的条件如下：（建议做成**模板**以便离线环境安装）
+假设构建一个3master+2node的k8s集群，需要5台节点共同的条件如下：
 
-1. 建议提前部署安装docker17.06或者17.03 ，cent下安装步骤如下：（`yum install -y docker是1.12版本需要改cg`）
-
+1. （`yum install -y docker是1.12.6版本需要改cg`）
+   17.06安装教程：
    ```bash
    #0.删除老旧的
    $ yum remove -y docker*  #如果默认之前yum安装的1.12版本,可以这样删没装可以跳过此步
@@ -51,7 +43,7 @@
 
 6. 节点之间要能互通内网环境稳定
 
-7. 安装中出了问题要看日志journalctl -n 10 ,运行中的日志查看`tail -f 10 /var/log/messages` ，docker的日志使用docker logs -f 容器id
+7. 安装中出了问题要看日志journalctl -n 10 ,运行中的日志查看`tail -f 10 /var/log/messages` 
 
 ## 系统架构图
 
@@ -112,24 +104,20 @@
 ```
 
 ## 初始化节点
-
-因为解压后包大小**大约2G**，所以解压时间较长，如果机器性能太弱可以选择先在一台性能好的节点上解压，然后`scp -r xxx root@ip:/root` 的方式分发解压后的包到其他节点。用网络带宽换取时间
+因为解压后包,然后`scp -r xxx root@ip:/root` 的方式分发解压后的包到其他节点
 
 **集群中所有节点都需要执行`cd shell && sh init.sh` （如果只跑单个master那么还需要执行 `sh master.sh`** ，多master勿跑 ）
 
-<u>有以下需要注意的事项：</u> 
-
-1. 如果同时几个节点加载解压，可能CPU或磁盘跑满，加载镜像时出现这种提示`Failed to execute operation: Connection timed out` .遇到这个提示就**重新执行脚本**
-2. 执行`init.sh` 的时间大概要10分钟 （普通双核CPU 4G内存）  
-3. 修改init.sh脚本在后面添加`chmod +x  /usr/bin/kube*` 
-4. cgroups驱动需要选择docker17.0x版本，就不需要去调整了，如果是1.1x版本的docker需要**手动修改**kubelet的启动文件里面的cgroups配置为`systemd`   （修改位置`/etc/systemd/system/kubelet.service.d`）   
-5. 提前修改默认的init 或者手动执行`sysctl  -w net.ipv4.ip_forward=1` 不然第七行报错
+> 有以下需要注意的事项：  
+1. 修改init.sh脚本在后面添加,如果二进制程序没可执行权限`chmod +x  /usr/bin/kube*` 
+2. cgroups驱动需要选择docker17.0x版本，就不需要去调整了，如果是1.1x版本的docker需要**手动修改**kubelet的启动文件里面的cgroups配置为`systemd`   （修改位置`/etc/systemd/system/kubelet.service.d`）   与 docker info|grep Cg一致
+3. 提前修改默认的init 或者手动执行`sysctl  -w net.ipv4.ip_forward=1` 不然第七行报错
 
 **执行完成后通过命令查看`kubectl get pod -n kube-system` ,状态全为Running正常**
 
 ## 起动etcd集群
 
-etcd集群安装使用docker-compose方式部署，如果已经提前模板装好可以跳过安装步骤
+etcd集群安装使用docker-compose方式部署
 
 A.使用docker-compose启动，如果没装：
 
@@ -151,8 +139,6 @@ OpenSSL version: OpenSSL 1.0.1t  3 May 2016
 ```
 
 在out/etcd目录下有相关模板`etcd-docker-compose-x.yam`，启动多个节点时修改成自己的ip地址 其它两个节点照抄，修改ip即可, image那行 应改为  `gcr.io/google_containers/etcd-amd64:3.1.11` ，实际就是版本号改一下即可。
-
-IP修改的地方比较多，建议谨慎一点以免把端口给不小心删了或者顺序错了，修改如下所示，其他节点照此修改
 
 ```yaml
 #需要修改所有含有ip的地方，下面的9，10，11，12行改为当前节点ip，15行三个ip顺序改为etcd集群部署的三台节点ip
@@ -235,9 +221,7 @@ featureGates:  #不用改
 
 ```bash
 $ kubeadm init --config out/kube/config
-# 如果提示[WARNING FileExisting-crictl]: crictl not found in system path但是没有报error可以继续，不影响后面运行
 ```
-
 把成功后的kubeadm join命令存在文件里，那东西不能丢了
 
 ## 启动calico等
@@ -262,13 +246,12 @@ data:
 $ kubectl apply -f out/net/calico.yaml
 $ kubectl apply -f out/heapster/influxdb
 $ kubectl apply -f out/heapster/rbac
-$kubectl apply -f out/dashboard
+$ kubectl apply -f out/dashboard
 #上面命令可整合为
 $ kubectl apply -f out/net/calico.yaml -f out/heapster/influxdb -f out/heapster/rbac -f out/dashboard
 ```
 
 1. 然后访问https://master1IP:32000端口即可，在chrome下无法进入提示证书有误，更换firefox可以，提示说证书日期不对（待修复）
-2. 启动后会发现heapster组件没有启动因为此时没有node工作节点加入，调度器还无法安排
 
 ## 启动多个master
 
@@ -283,7 +266,7 @@ $ scp -r /etc/kubernetes/pki root@10.1.245.93:/etc/kubernetes/pki
 
 同样使用master0上的out/kube/config文件，复制内容，拷贝到master1上，`scp out/kube/config  root@10.230.204.151:/root/` 执行`kubeadm init --config ~/config`
 
-master2/3节点同master1
+master2节点同master1
 
 ## 启动loadbalance
 
@@ -356,8 +339,6 @@ apiVersion: v1
         tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
 ```
 
-
-
 ## join node节点
 还是在node节点执行第一个master输出的命令
 
@@ -420,3 +401,4 @@ $ kubectl exec your-busybox-pod-name nslookup kubernetes
 ```
 
 杀非LB的master，多次测试看创建pod与dns是否正常，还可以telnet 10.96.0.1 443 去验证clusterip是否正常
+
