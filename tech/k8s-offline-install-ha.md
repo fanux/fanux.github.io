@@ -1,4 +1,5 @@
 # 使用kubeadm安装安全高可用kubernetes集群
+[安装包地址](https://market.aliyun.com/products/57742013/cmxz025618.html?spm=5176.730005.0.0.TFKV5K#sku=yuncode1961800000) 如非高可用安装请忽略此教程，直接看产品页的三步安装。
 
 > 总体流程：（master+node的总数需要是**奇数** ）
 
