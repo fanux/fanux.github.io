@@ -1,17 +1,17 @@
 # 使用kubeadm安装安全高可用kubernetes集群
 
 > 总体流程：（master+node的总数需要是**奇数** ）
->
+
 > **单个master流程：**
->
-> 1. 解压后在master 上 cd shell  && sh init.sh ,然后sh master.sh（注意因为脚本用的相对路径所以不再当前目录会找不到文件）
-> 2. 在node上 cd shell && sh init.sh  。然后在node上执行master输出的join命令即可
->
+
+ 1. 解压后在master 上 cd shell  && sh init.sh ,然后sh master.sh（注意因为脚本用的相对路径所以不再当前目录会找不到文件）
+ 2. 在node上 cd shell && sh init.sh  。然后在node上执行master输出的join命令即可
+
 > **多个master流程：**
->
-> 1. 解压后在master 1~n上`sh init.sh` ，然后**不要执行`master.sh`** ，然后同步开始分发二进制包给其它node，然后同时加载`init.sh` 提高部署效率
-> 2. 在上述节点init.sh完成后，如果是虚拟机创建，建议给每个节点做个**快照**，方便后续有问题可以快速重构而不用全部重来  **（可选）**
-> 3. ​跳至文档<u>启动etcd集群</u> 小节开始
+
+ 1. 解压后在master 1~n上`sh init.sh` ，然后**不要执行`master.sh`** ，然后同步开始分发二进制包给其它node，然后同时加载`init.sh` 提高部署效率
+ 2. 在上述节点init.sh完成后，如果是虚拟机创建，建议给每个节点做个**快照**，方便后续有问题可以快速重构而不用全部重来  **（可选）**
+ 3. ​跳至文档<u>启动etcd集群</u> 小节开始
 
 ## 提前准备
 
@@ -243,6 +243,20 @@ $ kubeadm init --config out/kube/config
 
 `mkdir ~/.kube && cp /etc/kubernetes/admin.conf ~/.kube/config ` （如果已经存在请校验一下是否相同,不确定建议删掉重新cp过去）
 
+修改calico配置，把etcd地址换成你安装好的集群地址：
+out/net/calico.yaml:
+```
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: calico-config
+  namespace: kube-system
+data:
+  # The location of your etcd cluster.  This uses the Service clusterIP
+  # defined below.
+  etcd_endpoints: "http://10.96.232.136:6666" # 这里改成etcd集群地址如 "http://172.31.244.232:2379,http://172.31.244.233:2379,http://172.31.244.234:2379"
+```
+
 ```bash
 $ kubectl apply -f out/net/calico.yaml
 $ kubectl apply -f out/heapster/influxdb
@@ -326,7 +340,7 @@ apiVersion: v1
     clusters:
     - cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        server: https://10.230.204.151:6443 #修改为 master1IP:6444
+        server: https://10.230.204.151:6443 #修改为 LoadBalanceIP:6444
       name: default
     contexts:
     - context:
@@ -344,8 +358,7 @@ apiVersion: v1
 
 
 ## join node节点
-
-还是在node节点执行第一个master输出的命令，就是上面haproxy的地址（ha的地址是master1的？）
+还是在node节点执行第一个master输出的命令
 
 ```bash
 $ kubeadm join --token <token> 10.1.245.94:6443 --discovery-token-ca-cert-hash sha256:<hash>
