@@ -5,6 +5,8 @@
 [kubernetes1.9.2离线安装包](https://market.aliyun.com/products/57742013/cmxz025618.html?spm=5176.730005.productlist.dcmxz025618.r9c1J1#sku=yuncode1961800000)
 ## 企业产品
 [kubernetes高可用方案服务](https://market.aliyun.com/products/52746001/cmfw026185.html?spm=5176.730005.productlist.dcmfw026185.r9c1J1#sku=yuncode2018500000)
+## 开源产品
+[高可用部署软件kubeinit](https://github.com/fanux/kubeinit) 研发中
 
 ## 宗旨
 以最廉价的方式让您的企业获得容器技术
