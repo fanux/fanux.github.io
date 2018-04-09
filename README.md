@@ -1,5 +1,10 @@
-# 云计算中的活字印刷术
-* 牺牲20%功能，降低80%复杂度
+# 产品列表
+## 个人产品
+[kubernetes1.8.1离线安装包](https://market.aliyun.com/products/56014009/cmxz022571.html?spm=5176.730005.productlist.dcmxz022571.r9c1J1#sku=yuncode1657100000) 推荐使用1.9.2
+
+[kubernetes1.9.2离线安装包](https://market.aliyun.com/products/57742013/cmxz025618.html?spm=5176.730005.productlist.dcmxz025618.r9c1J1#sku=yuncode1961800000)
+## 企业产品
+[kubernetes高可用方案服务](https://market.aliyun.com/products/52746001/cmfw026185.html?spm=5176.730005.productlist.dcmfw026185.r9c1J1#sku=yuncode2018500000)
 
 ## 宗旨
 以最廉价的方式让您的企业获得容器技术
