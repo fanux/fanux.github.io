@@ -1,4 +1,4 @@
-# kubernetes对接第三认证
+# kubernetes对接第三方认证
 广告： [安装包地址](https://market.aliyun.com/products/57742013/cmxz025618.html?spm=5176.730005.0.0.TFKV5K#sku=yuncode1961800000) 
 
 [原文地址](http://lameleg.com/tech/k8s-authenticating.html)
@@ -273,6 +273,7 @@ $ ./bin/example-app --issuer https://47.52.197.163:32000 --issuer-root-ca exampl
 ### 浏览器访问获取token
 浏览器访问 http://47.52.197.163:5555 ,点击login后能看到 Log in to dex 下面可以选 log in with Email 和 log in with github
 点击log in with github 授权后得到：
+
 ```
 Token:
 
@@ -294,7 +295,9 @@ Refresh Token:
 
 Chlrem12bDdmdGJ1dWNlYnk0b2llcWd0YzNqEhloNGhwbmlsZnByZ29mdWdsdWZ6bGp4cHhs
 ```
+
 那么 恭喜你成功了, 这个token就是我们要的东西
+
 ### 验证tocken
 ```
  curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImJjOTU0NjdlM2I0OTE5YWE1OTEzZDNkMDU3NGM2ZTRjYjBjY2NhNzgifQ.eyJpc3MiOiJodHRwczovLzQ3LjUyLjE5Ny4xNjM6MzIwMDAiLCJzdWIiOiJDZ2M0T1RFeU5UVTNFZ1puYVhSb2RXSSIsImF1ZCI6ImV4YW1wbGUtYXBwIiwiZXhwIjoxNTIzOTYyNjUyLCJpYXQiOjE1MjM4NzYyNTIsImF0X2hhc2giOiJFUXRWWm5ObE50c2hhWERfZ3N2UkNBIiwiZW1haWwiOiJmaHRqb2JAaG90bWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6InN0ZXZlbiJ9.vu0keGMoRGg6OAYpMZNN9zm4pnKXGyXDkZaRNj6MXDY9XsfnBDT4HnXkY17Lvm1ow0xPbq9cgVL3JBZT73jiddgFNAIXJffHfPejlVRSqXx9iF1uEcNIc5tDA1hUPtBrX8n_rzdz0sZsPMb4ZYMx3AdEylszpVrS_OelbB4I_2eLfO0KzwcEknOgV8cZZghCCITl6ZTOeeWEv5FPvJjRC2rpu_MkSY5tAf30SITwldFUMgF8ei3aPrZdojPLgqUWtxKaDmPpcHVLhYr0sLE_BnDZLjGP4ff8l5yy_EfDc7sQsrJR7StwZXRnK-n2omqaV3z-n5IxaUty85e_97FA1g" -k https://172.31.244.238:6443/api/v1/namespaces/default/pods
