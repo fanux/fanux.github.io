@@ -97,6 +97,15 @@ docker network inspect bridge 看一下,这是给容器内部分配的地址：
 单有这些还不够，还需要iptables对包作一些处理,下文细说。有了这些理论，再去顺着这个思路去读网络模块的代码
 
 ## network namespace实践
+### 使用ip操作docker net namespace
+```
+docker inspect --format '{{ .State.Pid }}' test1
+mkdir /var/run/netns   # ip命令的网络命名空间
+ln -s /proc/1231221/ns/net /var/run/netns/test1
+ip netns list
+ip netns exec test1 ip link
+```
+
 使用ip命令，如果没有的话安装一下：`yum install net-tools`
 
 基本命令：
