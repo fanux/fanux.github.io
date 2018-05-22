@@ -5,8 +5,8 @@ IP           | 用途                        | 备注
 10.100.81.11 | master、etcd                | 主节点
 10.100.81.12 | master、etcd、keepalived、haproxy | 主节点，同时部署keepalived、haproxy，保证master高可用
 10.100.81.13 | master、etcd、keepalived、haproxy | 主节点，同时部署keepalived、haproxy，保证master高可用
-10.100.81.14 | node、etcd                       | 非业务节点，部署ngress、nliver等组件
-10.100.81.15 | node、etcd                  | 非业务节点，部署ngress、nliver等组件
+10.100.81.14 | node、etcd                       | 非业务节点
+10.100.81.15 | node、etcd                  | 非业务节点
 10.100.81.16 | node                        | 业务节点
 10.100.81.17 | node                        | 业务节点
 10.100.81.18 | node                        | 业务节点
