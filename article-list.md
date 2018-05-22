@@ -24,3 +24,4 @@
 * [kubernetes1.9.2版本高可用安装](tech/k8s-offline-install-ha.md)
 * [kubernetes对接第三方认证](tech/k8s-authenticating.md)
 * [k8s高可用实践配置，ha keepalive kubelet kube-proxy等](tech/k8s-ha-conf.md)
+* [promethus + grafana配置使用教程](tech/grafana-promethus.md)
