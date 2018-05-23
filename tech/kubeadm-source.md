@@ -70,6 +70,7 @@ if err := nodebootstraptokenphase.UpdateOrCreateToken(client, i.cfg.Token, false
 ```
 
 7. 调用clientgo创建dns和kube-proxy
+
 ```
 if err := dnsaddonphase.EnsureDNSAddon(i.cfg, client); err != nil {
 	return fmt.Errorf("error ensuring dns addon: %v", err)
