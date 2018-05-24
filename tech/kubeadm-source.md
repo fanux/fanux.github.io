@@ -422,3 +422,5 @@ return kubeconfigutil.CreateWithToken(
 ```
 
 CreateWithToken上文提到了不再赘述，这样就能去生成kubelet配置文件了，然后把kubelet启动起来即可
+
+kubeadm join的问题就是渲染配置时没有使用命令行传入的apiserver地址，而用clusterinfo里的地址，这不利于我们做高可用，可能我们传入一个虚拟ip，但是配置里还是apiser的地址
