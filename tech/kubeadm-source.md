@@ -387,3 +387,38 @@ if err := kuberuntime.DecodeInto(legacyscheme.Codecs.UniversalDecoder(), []byte(
 kubeproxy大差不差，不说了,想改的话改： app/phases/addons/proxy/manifests.go
 
 ## kubeadm join
+kubeadm join比较简单，一句话就可以说清楚，获取cluster info, 创建kubeconfig，怎么创建的kubeinit里面已经说了。带上token让kubeadm有权限
+可以拉取
+```
+return https.RetrieveValidatedClusterInfo(cfg.DiscoveryFile)
+
+cluster info内容
+type Cluster struct {
+	// LocationOfOrigin indicates where this object came from.  It is used for round tripping config post-merge, but never serialized.
+	LocationOfOrigin string
+	// Server is the address of the kubernetes cluster (https://hostname:port).
+	Server string `json:"server"`
+	// InsecureSkipTLSVerify skips the validity check for the server's certificate. This will make your HTTPS connections insecure.
+	// +optional
+	InsecureSkipTLSVerify bool `json:"insecure-skip-tls-verify,omitempty"`
+	// CertificateAuthority is the path to a cert file for the certificate authority.
+	// +optional
+	CertificateAuthority string `json:"certificate-authority,omitempty"`
+	// CertificateAuthorityData contains PEM-encoded certificate authority certificates. Overrides CertificateAuthority
+	// +optional
+	CertificateAuthorityData []byte `json:"certificate-authority-data,omitempty"`
+	// Extensions holds additional information. This is useful for extenders so that reads and writes don't clobber unknown fields
+	// +optional
+	Extensions map[string]runtime.Object `json:"extensions,omitempty"`
+}
+
+return kubeconfigutil.CreateWithToken(
+	clusterinfo.Server,
+	"kubernetes",
+	TokenUser,
+	clusterinfo.CertificateAuthorityData,
+	cfg.TLSBootstrapToken,
+), nil
+```
+
+CreateWithToken上文提到了不再赘述，这样就能去生成kubelet配置文件了，然后把kubelet启动起来即可
