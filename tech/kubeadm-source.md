@@ -1,3 +1,5 @@
+[k8s离线安装包](http://lameleg.com/offline-install.html) 三步安装，简单到难以置信
+
 # kubeadm源码分析
 
 说句实在话，kubeadm的代码写的真心一般，质量不是很高。
