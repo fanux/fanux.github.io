@@ -1,13 +1,10 @@
 # 产品列表
 [My GitHub](https://github.com/fanux)
 ## 个人产品
-[kubernetes1.8.1离线安装包](https://market.aliyun.com/products/56014009/cmxz022571.html?spm=5176.730005.productlist.dcmxz022571.r9c1J1#sku=yuncode1657100000) 推荐使用1.9.2
-
-[kubernetes1.9.2离线安装包](https://market.aliyun.com/products/57742013/cmxz025618.html?spm=5176.730005.productlist.dcmxz025618.r9c1J1#sku=yuncode1961800000)
-
-[kubernetes1.10.3离线安装包 审核中]()
+[离线安装包](offline-install.md)
 
 [监控告警 (尽请期待)]()
+
 [日志收集 (尽请期待)]()
 ## 企业产品
 [kubernetes高可用方案服务](https://market.aliyun.com/products/52746001/cmfw026185.html?spm=5176.730005.productlist.dcmfw026185.r9c1J1#sku=yuncode2018500000)
