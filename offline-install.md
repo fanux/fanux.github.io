@@ -1,5 +1,5 @@
 # 安装包列表
-## [kubernetes1.10.3离线安装包 审核中]()
+## [kubernetes1.10.3离线安装包](http://sealyun.com/pro/products)
 
 * 全部使用当前最新版本组建
 * Cgroup driver自动检测，99%以上一键安装成功，遇到任何问题远程协助解决
